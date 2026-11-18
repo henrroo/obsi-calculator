@@ -1,0 +1,10 @@
+{
+  "calculationTime": "2026-10-27T12:00:00Z",
+  "books": [
+    {
+      "exchange": "Wide",
+      "bids": [[99.0, 5.0]],
+      "asks": [[101.0, 5.0]]
+    }
+  ]
+}

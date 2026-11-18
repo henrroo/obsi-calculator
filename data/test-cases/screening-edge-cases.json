@@ -1,0 +1,50 @@
+{
+  "calculationTime": "2026-10-27T12:00:00.000Z",
+  "books": [
+    {
+      "exchange": "Anchor1",
+      "bids": [[100.0, 2.0], [99.9, 3.0], [99.5, 5.0]],
+      "asks": [[100.1, 2.0], [100.2, 3.0], [100.8, 5.0]]
+    },
+    {
+      "exchange": "Crossed",
+      "bids": [[100.5, 1.0]],
+      "asks": [[100.4, 1.0]]
+    },
+    {
+      "exchange": "Anchor2",
+      "bids": [[100.0, 1.0], [99.8, 4.0]],
+      "asks": [[100.2, 1.0], [100.4, 4.0]]
+    },
+    {
+      "exchange": "NonPositiveEntries",
+      "bids": [[0, 1.0], [-5.0, 2.0], [100.0, 0], [99.9, 1.0]],
+      "asks": [[100.3, -1.0], [100.3, 1.0]]
+    },
+    {
+      "exchange": "Unreadable",
+      "bids": "n/a",
+      "asks": [[100.2, 1.0]]
+    },
+    {
+      "exchange": "AtFivePercent",
+      "bids": [[100.05, 0.5]],
+      "asks": [[110.16, 0.5]]
+    },
+    {
+      "exchange": "EmptyAfterScreen",
+      "bids": [[100.0, 1.0]],
+      "asks": [[0, 1.0], [100.2, -1.0]]
+    },
+    {
+      "exchange": "OverFivePercent",
+      "bids": [[100.05, 1.0]],
+      "asks": [[110.2, 1.0]]
+    },
+    {
+      "exchange": "StringNumbers",
+      "bids": [["100.0", "1.0"]],
+      "asks": [["100.2", "1.0"]]
+    }
+  ]
+}

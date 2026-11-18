@@ -1,0 +1,15 @@
+{
+  "calculationTime": "2026-10-27T12:00:00Z",
+  "books": [
+    {
+      "exchange": "Crossed",
+      "bids": [[100.5, 1.0]],
+      "asks": [[100.4, 1.0]]
+    },
+    {
+      "exchange": "NoAsks",
+      "bids": [[100.0, 1.0]],
+      "asks": []
+    }
+  ]
+}
