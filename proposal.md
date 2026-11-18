@@ -1,7 +1,7 @@
 # OBSI PED Extension Proposal (`--new-ped`)
 
 ## 1. Problem Statement
-The current static Potentially Erroneous Data (PED) threshold does not reflect predictable shifts in market liquidity for the XYZ token:
+The current static orderbook percentage deviation (PED) limit does not reflect predictable shifts in market liquidity for the XYZ token:
 1. **Weekday vs. Weekend:** Lower weekend liquidity forced a wide static PED limit, leaving weekday calculations under-protected.
 2. **Token Unlock Events:** Announced unlocks cause a ~48-hour surge in liquidity where tighter outlier detection is warranted.
 3. **Persistent Exchange Premiums:** Certain exchanges trade at a structural premium over the median, which may trigger false-positive PED exclusions.

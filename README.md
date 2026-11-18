@@ -1,6 +1,19 @@
 # OBSI Calculator
 
-Java 25 CLI that computes one Order Book Snapshot Index (OBSI) value from one snapshot, following [obsi-methodology.md](obsi-methodology.md). The `--new-ped` flag runs the PED extension described in [proposal.md](proposal.md).
+Handoff notes for the next Index Engineer picking up the Order Book Snapshot Index (OBSI).
+
+## What this project is for
+
+OBSI publishes a USD price for token XYZ at a given time T. It takes the order books captured from the constituent exchanges at T and produces that price in four steps:
+
+1. Drop exchanges with broken books or prices out of line with the rest.
+2. Combine the remaining books into one.
+3. Measure how deep that combined book stays tight around its mid-price.
+4. Take a depth-weighted average of the mid-price up to that depth.
+
+This repository is a Java 25 command-line tool that runs that calculation for one snapshot file and prints the result as JSON. It implements [obsi-methodology.md](obsi-methodology.md), the specification from the Product Manager. The `--new-ped` flag runs a proposed variant of the exchange-deviation (PED) screen, described in [proposal.md](proposal.md).
+
+This README is your entry point: how to run the tool, where each methodology step lives in the code, the choices and assumptions made, and what is still missing before production.
 
 ## Quick start
 
