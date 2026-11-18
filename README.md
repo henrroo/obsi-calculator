@@ -13,7 +13,7 @@ OBSI publishes a USD price for token XYZ at a given time T. It takes the order b
 
 This repository is a Java 25 command-line tool that runs that calculation for one snapshot file and prints the result as JSON. It implements [obsi-methodology.md](obsi-methodology.md), the specification from the Product Manager. The `--new-ped` flag runs a proposed variant of the exchange-deviation (PED) screen, described in [proposal.md](proposal.md).
 
-This README is your entry point: how to run the tool, where each methodology step lives in the code, the choices and assumptions made, and what is still missing before production.
+Below: how to run it, where each step lives, the assumptions made, and what is missing for production.
 
 ## Quick start
 
@@ -31,11 +31,11 @@ Requires Java 25. Maven comes from the wrapper.
 | Calculation or input failure | stderr, one JSON line | 1 |
 | Bad arguments | stderr, one JSON line | 2 |
 
-Nothing else is printed, so both streams stay machine-readable. The sample publishes `100.23`, utilized depth `4`, and excludes `Gamma` (crossed book) and `Delta` (PED 49.6%).
+Nothing else is printed, so both streams stay machine-readable. The sample publishes `100.23` at depth `4`, excluding `Gamma` (crossed) and `Delta` (PED 49.6%).
 
 ## Pipeline
 
-Every stage is pure and stateless, and each lives in its own package.
+Every stage is pure and stateless.
 
 | Methodology | Class | Notes |
 |---|---|---|
@@ -63,7 +63,6 @@ Every stage is pure and stateless, and each lives in its own package.
 - Identical prices means numerically equal: `100.0`, `100.00` and `1E+2` are one level.
 - The median of mid-prices is computed once over the structurally valid books and is not recomputed after PED exclusions.
 - After screening, uncrossing can never exhaust a side, because every surviving book has bid < ask. The check is kept as a guard and unit-tested with unscreened books.
-- Unknown input fields are ignored.
 
 ## `--new-ped` (Approach A)
 
@@ -81,21 +80,17 @@ Unlock starts come from the optional top-level `unlockEvents` array of UTC strin
 
 `./mvnw test` runs 241 deterministic JUnit 5 tests. Tests exist per stage (boundaries, exact-arithmetic cases, every failure path) and end to end in `CliTest`, which checks the exact stdout, stderr and exit code for every file in `data/`.
 
-`data/test-cases/` holds files for manual runs: screening edge cases, cross-exchange uncrossing, the `HALF_UP` tie, each failure reason, and the PED regimes on identical books. Expected values were cross-checked against an independent Python `decimal` implementation written from the methodology text. That implementation is not part of this repository.
+`data/test-cases/` holds files for manual runs: screening edge cases, uncrossing, the `HALF_UP` tie, each failure reason, and the PED regimes. Expected values were cross-checked against an independent Python `decimal` implementation of the methodology (not in this repository).
 
-## Libraries
-
-- **Jackson databind:** JSON parsing and serialization.
-- **JUnit 5:** tests.
-- **maven-shade-plugin:** builds the runnable fat JAR.
+**Libraries:** Jackson databind (JSON), JUnit 5 (tests), maven-shade-plugin (runnable JAR).
 
 ## Production gaps
 
-- **Performance:** Eq. 2 and Eq. 3 loop once per sampled XYZ. That is fine for realistic depth, but sizes in the millions would be slow; walking level boundaries would remove this.
+- **Performance:** Eq. 2 and Eq. 3 loop once per sampled XYZ; fine for realistic depth, slow for sizes in the millions.
 - **Duplicate exchanges:** exchange names are assumed unique but this is not enforced, so duplicates are treated as separate books.
 - **Regime configuration:** the limits and the 48h window are code constants. Production needs governed configuration with an effective date.
 - **Unlock calendar:** unlock events arrive with each snapshot. They should come from an audited calendar.
 - **Holidays:** the regimes do not account for public holidays.
-- **Auditability:** the output does not say which PED regime or limit applied. Adding `metadata.pedRegime` would help audits, but would change the output contract.
+- **Auditability:** the output does not say which PED regime applied; a `metadata.pedRegime` field would change the output contract.
 - **Persistent exchange premiums:** Approach A does not address them (see proposal.md).
-- **Operations:** there is no logging, metrics, live feed or publication pipeline. These are out of scope for this exercise.
+- **Operations:** no logging, metrics, live feed or publication pipeline (out of scope).
